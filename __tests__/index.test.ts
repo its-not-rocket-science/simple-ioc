@@ -1,4 +1,4 @@
-import { Container } from "../src/index";
+import { Container, CircularDependencyError } from "../src/index";
 
 
 class SimpleClass {
@@ -115,11 +115,12 @@ describe("Container should 'do something sensible' with tight circular dependenc
 
   test("basic chicken/egg dependency", () => {
     const c = new Container() as any;
+    let exception: any;
 
     c.register('egg', (c: any) => new Egg(c.chicken));
     c.register('chicken', (c: any) => new Chicken(c.egg));
 
-    expect(c.chicken).toBeDefined();
-    expect(c.egg).toBeDefined();
+    expect(() => c.chicken).toThrowError(CircularDependencyError);
+
   });
 });
