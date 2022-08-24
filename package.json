@@ -9,9 +9,7 @@
     "test": "jest --coverage"
   },
   "keywords": [
-    "inversion",
-    "of",
-    "control",
+    "inversion of control",
     "container",
     "class",
     "typescript"
