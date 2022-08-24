@@ -1,16 +1,18 @@
 export class Container {
   private _services = new Map<string, unknown>();
 
-  register(key: string, value: unknown) {
-    if (!this._services.has(key) && value !== undefined) {
-      this._services.set(key, value);
-    }
-  }
+  register (key: string, initialiser: Function) {
 
-  retrieve (key: string): unknown {
-    // will retrieve 'undefined' if key is absent - should we throw an error?
-    if (this._services.has(key)) {
-      return this._services.get(key);
-    }
+    // getter function will call initialiser lazily when property is accessed
+    Object.defineProperty(this, key, {
+      configurable: true,
+      enumerable: true,
+      get: () => {
+        if (!this._services.has(key)) {
+          this._services.set(key, initialiser(this));
+        }
+        return this._services.get(key);
+      }
+    });
   }
 }
