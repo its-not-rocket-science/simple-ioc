@@ -76,7 +76,7 @@ describe("Container can handle simple linear dependency relationship", () => {
     const c = new Container() as any;
 
     c.register('person', () => new Person({ name: PersonName }));
-    c.register('driver',  () => new Driver(c.person as Person));
+    c.register('driver',  () => new Driver(c.person));
 
     const retrievedDriver = c.driver as Driver;
 
@@ -86,11 +86,40 @@ describe("Container can handle simple linear dependency relationship", () => {
   test("linear dependencies given in reversed creation order", () => {
     const c = new Container() as any;
 
-    c.register('driver',  () => new Driver(c.person as Person));
+    c.register('driver',  () => new Driver(c.person));
     c.register('person', () => new Person({ name: PersonName }));
 
     const retrievedDriver = c.driver as Driver;
 
     expect(retrievedDriver.config.config.name).toBe(PersonName);
+  });
+});
+
+class Chicken {
+  private egg: Egg;
+
+  constructor(e: Egg) {
+    this.egg = e;
+  }
+}
+
+class Egg {
+  private chicken: Chicken;
+
+  constructor(c: Chicken) {
+    this.chicken = c;
+  }
+}
+
+describe("Container should 'do something sensible' with tight circular dependencies", () => {
+
+  test("basic chicken/egg dependency", () => {
+    const c = new Container() as any;
+
+    c.register('egg', (c: any) => new Egg(c.chicken));
+    c.register('chicken', (c: any) => new Chicken(c.egg));
+
+    expect(c.chicken).toBeDefined();
+    expect(c.egg).toBeDefined();
   });
 });
