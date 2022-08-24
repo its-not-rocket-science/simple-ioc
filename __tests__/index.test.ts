@@ -49,3 +49,48 @@ describe("Container can handle registration and use of simple values", () => {
   });
 
 });
+
+type NameConfig = {
+  name: string;
+};
+
+class Person {
+  config: NameConfig;
+  constructor(config: NameConfig) {
+    this.config = config;
+  }
+}
+
+class Driver {
+  config: Person;
+  constructor(config: Person) {
+    this.config = config;
+  }
+}
+
+const PersonName = 'Bob Human';
+
+describe("Container can handle simple linear dependency relationship", () => {
+
+  test("linear dependencies given in creation order", () => {
+    const c = new Container();
+
+    c.register('person', new Person({ name: PersonName }));
+    c.register('driver',  new Driver(c.retrieve('person') as Person));
+
+    const retrievedDriver = c.retrieve('driver') as Driver;
+
+    expect(retrievedDriver.config.config.name).toBe(PersonName);
+  });
+
+  test("linear dependencies given in reversed creation order", () => {
+    const c = new Container();
+
+    c.register('driver',  new Driver(c.retrieve('person') as Person));
+    c.register('person', new Person({ name: PersonName }));
+
+    const retrievedDriver = c.retrieve('driver') as Driver;
+
+    expect(retrievedDriver.config.config.name).toBe(PersonName);
+  });
+});
