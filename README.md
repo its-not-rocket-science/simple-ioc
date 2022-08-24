@@ -18,4 +18,4 @@ c.register('driver',  () => new Driver(c.person));
 ##Notes
 * I would have liked to have developed a functional programming paradigm solution, but I couldn't see a way to abstract this approach into a meaningful library
 * I wouldn't normally aim for 100% coverage in unit testing unless this was a formal requirement. For (potentially) widely used libraries, this seems a reasonable goal
-* I might have a go at publishing this on NPM shortly - if someone else starts using it, they might spot bugs or improvements for me :relaxed:
+* Published on NPM as `nano-ioc@1.0.0` - in the unlikely event that someone else starts using it, they might spot bugs or improvements :relaxed: 
