@@ -18,7 +18,7 @@ describe("Container can handle registration and use of simple values", () => {
 
     c.register('simple', () => new SimpleClass(TestNumber));
 
-    const simpleObject = c.simple as SimpleClass;
+    const simpleObject = c.simple;
 
     expect(simpleObject.count).toBe(TestNumber);
   });
@@ -37,7 +37,7 @@ describe("Container can handle registration and use of simple values", () => {
 
     c.register('func', () => fn);
 
-    const retrievedFunction = c.func as Function;
+    const retrievedFunction = c.func;
 
     expect(retrievedFunction()).toBe(TestNumber);
   });
@@ -78,7 +78,7 @@ describe("Container can handle simple linear dependency relationship", () => {
     c.register('person', () => new Person({ name: PersonName }));
     c.register('driver',  () => new Driver(c.person));
 
-    const retrievedDriver = c.driver as Driver;
+    const retrievedDriver = c.driver;
 
     expect(retrievedDriver.config.config.name).toBe(PersonName);
   });
@@ -89,7 +89,7 @@ describe("Container can handle simple linear dependency relationship", () => {
     c.register('driver',  () => new Driver(c.person));
     c.register('person', () => new Person({ name: PersonName }));
 
-    const retrievedDriver = c.driver as Driver;
+    const retrievedDriver = c.driver;
 
     expect(retrievedDriver.config.config.name).toBe(PersonName);
   });
@@ -115,7 +115,6 @@ describe("Container should 'do something sensible' with tight circular dependenc
 
   test("basic chicken/egg dependency", () => {
     const c = new Container() as any;
-    let exception: any;
 
     c.register('egg', (c: any) => new Egg(c.chicken));
     c.register('chicken', (c: any) => new Chicken(c.egg));
