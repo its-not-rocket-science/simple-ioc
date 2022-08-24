@@ -10,9 +10,9 @@ Very simple container class to handle inversion of control
 1. Circular dependencies are detected when values are accessed and thrown as `CircularDependencyError` 
 2. To access the dynamically defined container properties, the container instance must be asserted as type `any`
 ```
-const c = new Container() ***as any***;
+const c = new Container() as any;
 c.register('person', () => new Person({ name: 'Frank Zappa' }));
-c.register('driver',  () => new Driver(***c.person***));
+c.register('driver',  () => new Driver(c.person));
 ```
 
 ##Notes
