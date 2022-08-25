@@ -37,7 +37,7 @@ Hopefully self-explanatory from this example. Note that the order in which depen
 const c = new Container() as any;
 
 c.register('driver',  () => new Driver(c.person));
-c.register('person', () => new Person({ name: PersonName }));
+c.register('person', () => new Person({ name: 'Jimi Hendrix' }));
 
 const retrievedDriver = c.driver;
 ```
