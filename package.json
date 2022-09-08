@@ -1,6 +1,6 @@
 {
   "name": "nano-ioc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Very simple container class to handle inversion of control",
   "main": "index.ts",
   "type": "module",

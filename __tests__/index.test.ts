@@ -1,4 +1,8 @@
-import { Container, CircularDependencyError } from "../src/index";
+import {
+  Container,
+  CircularDependencyError,
+  MissingDependencyError
+} from "../src/index";
 
 
 class SimpleClass {
@@ -76,7 +80,7 @@ describe("Container can handle simple linear dependency relationship", () => {
     const c = new Container() as any;
 
     c.register('person', () => new Person({ name: PersonName }));
-    c.register('driver',  () => new Driver(c.person));
+    c.register('driver', (person: any) => new Driver(c.person), ['person']);
 
     const retrievedDriver = c.driver;
 
@@ -86,7 +90,7 @@ describe("Container can handle simple linear dependency relationship", () => {
   test("linear dependencies given in reversed creation order", () => {
     const c = new Container() as any;
 
-    c.register('driver',  () => new Driver(c.person));
+    c.register('driver', (person: any) => new Driver(c.person), ['person']);
     c.register('person', () => new Person({ name: PersonName }));
 
     const retrievedDriver = c.driver;
@@ -123,3 +127,13 @@ describe("Container should 'do something sensible' with tight circular dependenc
 
   });
 });
+
+describe("dependency not provided", () => {
+
+  test("Driver constructor expects a Person object which isn't ptovided", () => {
+    const c = new Container() as any;
+    c.register('driver',  (person: any) => new Driver(c.person), ['person']);
+
+    expect(() => c.driver).toThrow(MissingDependencyError);
+  });
+})
